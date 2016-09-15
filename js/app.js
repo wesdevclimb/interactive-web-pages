@@ -20,8 +20,18 @@ var createNewTaskElement = function(taskString){
   var editButton = document.createElement("button"); //class = edit
   //button.delete
   var deleteButton = document.createElement("button"); //class = delete
+  
   //each element, needs to be modifying
-
+  checkBox.type = "checkbox";
+  editInput.type = "text";
+  
+  editButton.innerText = "Edit";
+  editButton.className = "edit";
+  deleteButton.innerText = "Delete";
+  deleteButton.className = "delete";
+  
+  label.innerText = taskString;
+  
   //each element needs appending
   listItem.appendChild(checkBox);
   listItem.appendChild(label);
@@ -36,27 +46,40 @@ var createNewTaskElement = function(taskString){
 var addTask = function() {
   console.log("Add task...");
   //create a new list item with the text from #new-task:
-  var listItem = createNewTaskElement("some new task");
-
+  var listItem = createNewTaskElement(taskInput.value);
   //append item to incompleteTaskHolder
   incompleteTaskHolder.appendChild(listItem);
   bindTaskEvents(listItem, taskCompleted);
+  
+  taskInput.value = "";
 };
 
 //edit an existing task
 var editTask = function(){
   console.log("Edit task...");
-  //when the edit button is pressed
-    //if the class of the parent is .editMode
-      //switch from .editMode
-      //label text becomes input value
-    //else
-      //switch to .editMode
-      //input value becomes the label's text
-};
+  var editButton = this.parentNode.querySelector("button.edit");
+  var listItem = this.parentNode;
+  var editInput = listItem.querySelector("input[type=text]");
+  var label = listItem.querySelector("label");
+  var containsClass = listItem.classList.contains("editMode")
+  //if the class of the parent is .editMode
+  if(containsClass) {
+    //switch from .editMode
+    //label text becomes input value
+    label.innerText = editInput.value;
+    //switch text on button to save
+    editButton.innerText = "Edit";
+  } else {
+    //switch to .editMode
+    //input value becomes label's text
+    editInput.value = label.innerText;
+    //switch text on button to edit
+    editButton.innerText = "Save";
+  }
 
-    //toggle .editMode
-
+    //toggle .editMode on the list item
+    listItem.classList.toggle("editMode");
+}
 //delete an existing task
 var deleteTask = function(){
   console.log("Delete task...");
